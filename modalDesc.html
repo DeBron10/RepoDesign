@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Dynamic Table Example</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        th, td{
+            border:1px solid black;
+            padding:10px;
+        }
+
+        th{
+            background:black;
+            color:white;
+        }
+
+        button{
+            padding:5px 10px;
+            cursor:pointer;
+        }
+
+        .modal{
+
+            display:none;
+            position:fixed;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.5);
+
+        }
+
+        .modal-content{
+
+            background:white;
+            width:60%;
+            margin:50px auto;
+            padding:20px;
+            position:relative;
+
+        }
+
+        .close{
+
+            position:absolute;
+            right:20px;
+            top:10px;
+            font-size:25px;
+            cursor:pointer;
+
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <button onclick="loadData()">Load Data</button>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Sr No</th>
+                <th>Project Name</th>
+                <th>Department</th>
+                <th>Manager</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Description</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="tableBody">
+
+        </tbody>
+
+    </table>
+
+
+
+    <!-- MODAL -->
+
+    <div class="modal" id="myModal">
+
+        <div class="modal-content">
+
+            <span class="close" onclick="closeModal()">&times;</span>
+
+            <h2 id="projectTitle"></h2>
+
+            <div id="projectDescription"></div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        function loadData(){
+
+            /*
+                SAMPLE OBJECT FROM BACKEND AJAX
+            */
+
+            var response = [
+
+                {
+                    srNo:1,
+                    projectName:"Emotion Detection System",
+                    department:"AI",
+                    manager:"Abhi",
+                    status:"Running",
+                    priority:"High",
+                    description:"This is full description of Emotion Detection System project."
+                },
+
+                {
+                    srNo:2,
+                    projectName:"HR Portal",
+                    department:"HR",
+                    manager:"Rohan",
+                    status:"Pending",
+                    priority:"Medium",
+                    description:""
+                },
+
+                {
+                    srNo:3,
+                    projectName:"Finance Dashboard",
+                    department:"Finance",
+                    manager:"Neha",
+                    status:"Completed",
+                    priority:"Low",
+                    description:null
+                }
+
+            ];
+
+
+            /*
+                CLEAR OLD ROWS
+            */
+
+            $("#tableBody").html("");
+
+
+            /*
+                LOOP OBJECT
+            */
+
+            for(var i = 0; i < response.length; i++){
+
+                var item = response[i];
+
+
+                /*
+                    CREATE TR
+                */
+
+                var tr = $("<tr></tr>");
+
+
+                /*
+                    CREATE TDs
+                */
+
+                var td1 = $("<td></td>");
+                td1.text(item.srNo);
+
+                var td2 = $("<td></td>");
+                td2.text(item.projectName);
+
+                var td3 = $("<td></td>");
+                td3.text(item.department);
+
+                var td4 = $("<td></td>");
+                td4.text(item.manager);
+
+                var td5 = $("<td></td>");
+                td5.text(item.status);
+
+                var td6 = $("<td></td>");
+                td6.text(item.priority);
+
+
+                /*
+                    DESCRIPTION TD
+                */
+
+                var td7 = $("<td></td>");
+
+
+                /*
+                    CHECK DESCRIPTION
+                */
+
+                if(item.description != null && item.description != ""){
+
+                    var button = $("<button></button>");
+
+                    button.text("Click Here");
+
+
+                    /*
+                        DIRECT ONCLICK ATTRIBUTE
+                    */
+
+                    button.attr(
+                        "onclick",
+                        "openModal('" +
+                        item.projectName +
+                        "','" +
+                        item.description +
+                        "')"
+                    );
+
+                    td7.append(button);
+
+                }
+                else{
+
+                    td7.text("-");
+
+                }
+
+
+                /*
+                    APPEND TD TO TR
+                */
+
+                tr.append(td1);
+                tr.append(td2);
+                tr.append(td3);
+                tr.append(td4);
+                tr.append(td5);
+                tr.append(td6);
+                tr.append(td7);
+
+
+                /*
+                    APPEND TR TO TBODY
+                */
+
+                $("#tableBody").append(tr);
+
+            }
+
+        }
+
+
+
+        /*
+            OPEN MODAL
+        */
+
+        function openModal(projectName, description){
+
+            $("#projectTitle").text(projectName);
+
+            $("#projectDescription").html(description);
+
+            $("#myModal").show();
+
+        }
+
+
+
+        /*
+            CLOSE MODAL
+        */
+
+        function closeModal(){
+
+            $("#myModal").hide();
+
+        }
+
+    </script>
+
+</body>
+</html>
